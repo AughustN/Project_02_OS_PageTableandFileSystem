@@ -421,7 +421,7 @@ bmap(struct inode *ip, uint bn)
 
   // Doubly-indirect
   if(bn < NINDIRECT * NINDIRECT) {
-    // Bước A: Load/alloc doubly-indirect block (addrs[NDIRECT+1])
+    // Step A: Load/alloc doubly-indirect block 
     if((addr = ip->addrs[NDIRECT+1]) == 0) {
       addr = balloc(ip->dev);
       if(addr == 0) return 0;
@@ -430,7 +430,7 @@ bmap(struct inode *ip, uint bn)
     bp = bread(ip->dev, addr);
     a = (uint*)bp->data;
 
-    // Bước B: Load/alloc singly-indirect block bên trong
+    // Step B: Load/alloc singly-indirect block 
     if((addr = a[bn / NINDIRECT]) == 0) {
       addr = balloc(ip->dev);
       if(addr) {
@@ -441,7 +441,7 @@ bmap(struct inode *ip, uint bn)
     brelse(bp);
     if(addr == 0) return 0;
 
-    // Bước C: Load/alloc data block
+    // Step C: Load/alloc data block
     bp = bread(ip->dev, addr);
     a = (uint*)bp->data;
     if((addr = a[bn % NINDIRECT]) == 0) {
